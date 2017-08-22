@@ -1,0 +1,4 @@
+<resources>
+  <string name="app_name">ShirtsMVP</string>
+  <string name="error_no_data">"No data returned. Pull to refresh."</string>
+</resources>

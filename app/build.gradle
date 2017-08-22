@@ -1,0 +1,139 @@
+apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+
+
+//Version information
+def versionMajor = 0
+def versionMinor = 1
+def versionPatch = 0
+
+// Signing properties.
+def keyAliasValue = "mvp"
+def keyPasswordValue = "androidmvp"
+def storePasswordValue = "androidmvp"
+def storeFilePath = rootProject.file('keystore/debug-keystore.jks')
+
+android {
+  compileSdkVersion rootProject.targetSdkVersion
+  buildToolsVersion rootProject.buildToolsVersion
+  defaultConfig {
+    applicationId "com.shirts.mvp"
+    minSdkVersion rootProject.minSdkVersion
+    targetSdkVersion rootProject.targetSdkVersion
+    versionCode versionMajor * 1000000 + versionMinor * 1000 + versionPatch * 100
+    versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+
+    testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+  }
+
+  signingConfigs {
+    debug {
+      keyAlias keyAliasValue
+      keyPassword keyPasswordValue
+      storeFile storeFilePath
+      storePassword storePasswordValue
+      v2SigningEnabled false
+    }
+  }
+
+  buildTypes {
+    debug {
+      applicationIdSuffix '.debug'
+      versionNameSuffix '-DEBUG'
+      signingConfig signingConfigs.debug
+    }
+
+  }
+
+  dataBinding {
+    enabled = true
+  }
+
+  configurations.all {
+    resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+}
+
+dependencies {
+  // Android Support
+  compile "com.android.support:appcompat-v7:$rootProject.supportVersion"
+  compile "com.android.support:design:$rootProject.supportVersion"
+  compile "com.android.support:recyclerview-v7:$rootProject.supportVersion"
+  compile "com.android.support:cardview-v7:$rootProject.supportVersion"
+  compile "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
+  compile "com.android.support.test.espresso:espresso-idling-resource:$rootProject.espressoVersion"
+  compile "com.github.bumptech.glide:glide:$glide_version"
+
+  // Lifecycle arch
+  compile "android.arch.lifecycle:runtime:$rootProject.archVersion"
+  compile "android.arch.lifecycle:extensions:$rootProject.archVersion"
+  annotationProcessor "android.arch.lifecycle:compiler:$rootProject.archVersion"
+
+  // Room arch
+  compile "android.arch.persistence.room:runtime:$rootProject.archVersion"
+  annotationProcessor "android.arch.persistence.room:compiler:$rootProject.archVersion"
+  compile "android.arch.persistence.room:rxjava2:$rootProject.archVersion"
+
+
+  // Retrofit & OkHttp
+  compile "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
+  compile "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
+  compile "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitVersion"
+  debugCompile "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttpVersion"
+
+  // Timber
+  compile "com.jakewharton.timber:timber:$rootProject.timberVersion"
+
+  // ButterKnife
+  compile "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
+  annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
+
+  //dagger
+  annotationProcessor rootProject.ext.daggerCompiler
+  compile rootProject.ext.dagger
+  compile rootProject.ext.daggerAndroid
+  compile rootProject.ext.daggerAndroidSupport
+  annotationProcessor rootProject.ext.daggerAndroidProcessor
+
+  // RxJava
+  compile "io.reactivex.rxjava2:rxjava:$rootProject.rxJavaVersion"
+  compile "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
+
+  // Developer tools
+  debugCompile "com.facebook.stetho:stetho:$rootProject.stethoVersion"
+  debugCompile "com.facebook.stetho:stetho-okhttp3:$rootProject.stethoVersion"
+  debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.leakcanaryVersion"
+  releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakcanaryVersion"
+  testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.leakcanaryVersion"
+
+  // Local Unit Test
+  testCompile "junit:junit:$rootProject.junitVersion"
+  testCompile "org.mockito:mockito-core:$rootProject.mockitoVersion"
+  testCompile "org.hamcrest:hamcrest-all:$rootProject.hamcrestVersion"
+
+  // Android Testing Support Library's runner and rules
+  androidTestCompile "com.android.support.test:runner:$rootProject.runnerVersion"
+  androidTestCompile "com.android.support.test:rules:$rootProject.runnerVersion"
+
+  // Android Unit Test libraries
+  androidTestCompile "junit:junit:$rootProject.junitVersion"
+  androidTestCompile "org.mockito:mockito-core:$rootProject.mockitoVersion"
+  androidTestCompile "org.mockito:mockito-android:$rootProject.mockitoVersion"
+
+  // Espresso UI Testing
+  androidTestCompile "com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion"
+  androidTestCompile "com.android.support.test.espresso:espresso-contrib:$rootProject.espressoVersion"
+  androidTestCompile "com.android.support.test.espresso:espresso-intents:$rootProject.espressoVersion"
+
+  // Resolve conflicts between main and test APK:
+  androidTestCompile "com.android.support:appcompat-v7:$rootProject.supportVersion"
+  androidTestCompile "com.android.support:design:$rootProject.supportVersion"
+  androidTestCompile "com.android.support:recyclerview-v7:$rootProject.supportVersion"
+  androidTestCompile "com.android.support:cardview-v7:$rootProject.supportVersion"
+  androidTestCompile "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
+}
