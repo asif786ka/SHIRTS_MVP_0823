@@ -101,8 +101,6 @@ public class ShirtsActivity extends BaseActivity implements ShirtsContract.View 
 
   @Override
   public void showShirtDetail(Shirts shirts) {
-    Intent intent = new Intent(Intent.ACTION_VIEW);
-    //intent.setData(Uri.parse(shirts.getLink()));
-    startActivity(intent);
+
   }
 }
